@@ -1,26 +1,373 @@
 @import "tailwindcss";
 
+/* ============================================================
+   F1 Strategy Lab — Design System
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core palette */
+  --f1-red: #e10600;
+  --f1-red-dark: #b30500;
+  --f1-red-glow: rgba(225, 6, 0, 0.6);
+  --bull-yellow: #ffc72c;
+
+  /* Red Bull Dark Theme (Default) */
+  --bg-primary: #011425; /* Red Bull Navy */
+  --bg-secondary: #021c33;
+  --bg-card: #041d33;
+  --bg-card-hover: #072540;
+  --bg-glass: rgba(1, 20, 37, 0.85);
+  --bg-glass-border: rgba(255, 255, 255, 0.1);
+
+  --text-primary: #ffffff;
+  --text-secondary: #9ba3ae;
+  --text-muted: #6b7280;
+
+  --border-primary: rgba(255, 255, 255, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+
+  --accent: var(--bull-yellow);
+  --accent-hover: #e5b327;
+
+  /* Surfaces */
+  --surface-elevated: rgba(4, 29, 51, 0.95);
+  --surface-overlay: rgba(1, 20, 37, 0.9);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(255, 199, 44, 0.4);
+
+  /* Spacing */
+  --nav-height: 72px;
+  /* Hero overrides */
+  --hero-simulate: #ffffff;
+  --hero-dominate: #15151e; /* Ink Black */
+}
+
+[data-theme="light"] {
+  /* Official F1 Light Theme */
+  --bg-primary: #f3f4f6;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fafafa;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --bg-glass-border: rgba(0, 0, 0, 0.05);
+
+  --text-primary: #15151e;
+  --text-secondary: #4b4b5a;
+  --text-muted: #8e8e98;
+
+  --border-primary: rgba(21, 21, 30, 0.15);
+  --border-subtle: rgba(21, 21, 30, 0.08);
+
+  --accent: var(--f1-red);
+  --accent-hover: var(--f1-red-dark);
+
+  --surface-elevated: #ffffff;
+  --surface-overlay: rgba(243, 244, 246, 0.9);
+
+  --shadow-sm: 0 2px 4px rgba(21, 21, 30, 0.05);
+  --shadow-md: 0 8px 16px rgba(21, 21, 30, 0.08);
+  --shadow-lg: 0 16px 32px rgba(21, 21, 30, 0.12);
+  --shadow-glow: 0 0 20px rgba(225, 6, 0, 0.3);
+
+  /* Hero overrides */
+  --hero-simulate: #9ca3af; /* Darker grey to represent 'white' in light theme */
+  --hero-dominate: #15151e; /* Bold ink black */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-border-primary: var(--border-primary);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-f1-red: var(--f1-red);
+  --color-f1-red-dark: var(--f1-red-dark);
+
+  --color-tire-soft: #ff3333;
+  --color-tire-medium: #ffc700;
+  --color-tire-hard: #ffffff;
+  --color-tire-inter: #43b02a;
+  --color-tire-wet: #0072ce;
+
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   Base styles
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Glassmorphism
+   ============================================================ */
+
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  border-bottom: 2px solid var(--f1-red);
+}
+
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0px; /* Sharp edges */
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  /* overflow: hidden removed so dropdowns render over boundaries */
+}
+
+/* We only want overflow hidden on the before overlay, not the card itself to prevent dropdown clipping */
+.glass-card > * {
+  position: relative;
+  z-index: 10;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+
+.glass-card:hover::before {
+  left: 200%;
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-lg);
+  border-right: 4px solid var(--f1-red);
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Authentic F1 Slanted Edges */
+.f1-clip-button {
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+.f1-clip-button-reverse {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+}
+
+.f1-clip-card {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0 100%
+  );
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading-font {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   Gradients & Effects
+   ============================================================ */
+
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    #111827 40%,
+    rgba(225, 6, 0, 0.08) 100%
+  );
+}
+
+[data-theme="light"] .gradient-hero {
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    #f1f5f9 40%,
+    rgba(225, 6, 0, 0.04) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #f1f5f9 0%, var(--f1-red) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .gradient-text {
+  background: linear-gradient(135deg, #0f172a 0%, var(--f1-red) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-line {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--f1-red) 50%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px var(--f1-red-glow);
+}
+
+/* ============================================================
+   Animated background grid (hero)
+   ============================================================ */
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ============================================================
+   Scrollbar styling
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ============================================================
+   Animations
+   ============================================================ */
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px var(--f1-red-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--f1-red-glow);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   Skeleton loader
+   ============================================================ */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-card);
+  border-radius: 8px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-subtle) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   Chart container
+   ============================================================ */
+
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* Recharts tooltip override */
+.recharts-tooltip-wrapper {
+  z-index: 50 !important;
+}
+
+.recharts-default-tooltip {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-lg) !important;
 }

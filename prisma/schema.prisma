@@ -1,0 +1,17 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Strategy {
+  id        String   @id @default(uuid())
+  season    String
+  round     String
+  driverId  String
+  stops     Json
+  createdAt DateTime @default(now())
+}
