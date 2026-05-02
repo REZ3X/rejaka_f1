@@ -1,8 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# F1 Strategy Lab
+
+F1 Strategy Lab is a serverless web application that allows Formula 1 fans and analysts to explore historical race data, visualize lap times, and simulate race strategies. The app is powered by Jolpica F1 data.
+
+## Features
+
+- **Race Explorer**: Fetch and display historical race data, including driver performance, lap times, and position charts.
+- **Strategy Simulator (Core)**: A custom deterministic simulation engine that lets you build and test F1 race strategies.
+  - Adjust pit stop laps
+  - Select tire compounds (Soft, Medium, Hard)
+  - Simulate tire degradation
+  - Compare original vs. simulated lap times and time delta graphs.
+- **Strategy Comparison**: Compare different race strategies side-by-side to find the optimal pit window.
+- **Modern UI**: Fully responsive application with Dark/Light mode, built with Next.js App Router and Tailwind CSS.
+
+## Tech Stack
+
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router, React 19)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Components & Icons**: [Lucide React](https://lucide.dev/), [Framer Motion](https://www.framer.com/motion/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Data Fetching**: [SWR](https://swr.vercel.app/)
+- **Database / ORM**: [Prisma](https://www.prisma.io/)
+- **Linting & Formatting**: [Biome](https://biomejs.dev/)
 
 ## Getting Started
 
-First, run the development server:
+First, install the project's dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+Set up your environment variables by creating a `.env` file in the root of your project and configuring any required database URIs for Prisma or API keys.
+
+Initialize the Prisma database (if applicable):
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +56,16 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application in action.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app`: Next.js App Router pages and API routes (`/api/race`, `/api/strategy`, etc.).
+- `src/components`: Reusable UI components for layout, race visualization, and strategy simulation.
+- `src/hooks`: Custom React hooks (e.g., `useSimulation`, `useRaces`) for data fetching and state management.
+- `src/lib`: Utility functions, Prisma database client, API handlers, and the core simulation engine logic.
+- `prisma`: Prisma schema defining your database models.
 
-## Learn More
+## Data Source
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Data powered by Jolpica F1 / Ergast Developer API.
